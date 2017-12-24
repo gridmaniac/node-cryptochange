@@ -1,0 +1,12 @@
+extends ./layouts/main.pug
+block content
+  .content.help
+    h1.text.text_type-align-center.text_type-margin-bottom-big Помощь
+    a(href='/help/article/1') Почему цена Биткоина подвержена столь резким изменениям?
+    a(href='/help/article/2') Несколько правил для безопасного хранения криптовалюты
+    a(href='/help/article/1') Особенности работы системы криптовалют  
+    a(href='/help/article/1') Какие онлайн-сервисы обеспечивают надежность хранения Биткоинов?
+    a(href='/help/article/1') Зачем необходимо проходить верификацию карты?
+    a(href='/help/article/1') Сколько времени занимает обработка заявки?
+block sidebar
+  include ./includes/balance

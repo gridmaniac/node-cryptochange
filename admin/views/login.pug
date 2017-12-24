@@ -1,0 +1,16 @@
+extends layout-form
+
+block content
+  .container.col-lg-4
+    img.m-t-20.pu(src='/admin/assets/logo.png')
+    h3.text-themecolor.m-b-15.m-t-30 Вход в систему
+    form.form-horizontal.form-material(method='post' action='')
+      .row
+        .form-group.col-12
+          input#email.form-control.form-control-line.text-center(type='text' placeholder='Email' name='email')
+        .form-group.col-12
+          input#password.form-control.form-control-line.text-center(type='password' placeholder='Пароль' name='password')
+        .form-group.col-12
+          input.btn.btn-info.col-4.pull-right(type='submit' value='Войти')
+    if message && message.length > 0
+      .alert.alert-warning #{message}

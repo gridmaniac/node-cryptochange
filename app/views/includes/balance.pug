@@ -1,0 +1,16 @@
+block sidebar
+  .sidebar__item.balance
+    .sidebar__title
+      h3.text.text_type-align-left.text_type-margin-bottom-big Наши резервы
+      each wallet in wallets
+        .balance__item
+          .balance__item-title-wrapper
+            .balance__item-icon
+              img(src=`/i/${wallet.icon}`)
+            .balance__item-title
+              p #{wallet.title}
+          .balance__item-amount-wrapper
+            .balance__item-amount
+              p=parseFloat(wallet.balance.toFixed(wallet.fixto))
+            .balance__item-code
+              p #{wallet.code}

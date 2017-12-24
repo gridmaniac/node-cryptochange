@@ -1,0 +1,255 @@
+body{
+  @include font('MyriadPro',16px,black);
+}
+
+h1{
+  @include font('MyriadPro',36px,#181b51);
+  margin-bottom: 30px;
+}
+
+h2{
+  @include font('MyriadPro',30px,#181b51);
+  margin-bottom: 20px;
+}
+
+h3{
+  @include font('MyriadPro',25px,#181b51);
+  margin-bottom: 10px;
+}
+
+h4{
+  @include font('MyriadPro',20px,#181b51);  
+}
+
+.evimark > img {
+  width: 100%;
+}
+
+.page{
+
+  p{
+    margin-bottom: 1.5em;
+  }
+
+  ul{
+    list-style: disc;
+    padding-left: 2em;
+    margin-bottom: 1.5em;
+  }
+
+  li{
+    margin-bottom: 0.5em;
+  }
+
+  b{
+    @include font('MyriadProSemibold',16px,black);
+  }
+}
+
+a{
+  color: #23527c;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover{
+    opacity: 0.7;
+    text-decoration: none;
+  }
+  &:focus{
+    text-decoration: none;
+  }
+}
+
+b{
+  @include font('MyriadProSemibold',18px,#045e38);
+}
+
+label{
+  text-transform: uppercase;
+  color: #181b51;
+  font-size: 20px;
+
+  &_type-font-size-small{
+    font-size: 16px;
+  }
+}
+
+.text{  
+  
+  &-block{    
+    p{
+      margin-bottom: 1.5em;
+    }
+
+    ul{
+      list-style: disc;
+      padding-left: 2em;
+      margin-bottom: 1.5em;
+    }
+
+    li{
+      margin-bottom: 0.5em;
+    }
+
+    b{
+      @include font('MyriadProSemibold',16px,black);
+    }
+  }
+  
+  &_type-font-size-normal{
+    font-size: 16px;
+  }
+
+  &_type-font-size-nano{
+    font-size: 12px;
+  }
+
+  &_type-align-center{
+    text-align: center;
+  }
+  &_type-align-left{
+    text-align: left;
+  }
+  &_type-margin-bottom-big{
+    margin-bottom: 30px;
+  }
+  &_type-margin-bottom-medium{
+    margin-bottom: 20px;
+  }
+  &_type-margin-bottom-small{
+    margin-bottom: 10px;
+  }  
+}
+
+.separator{
+  height: 1px;
+  border: 1px solid #e4e4e4;
+  margin: 20px 0;
+}
+
+.table-wrapper{
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table{
+  width: 100%;
+  margin-bottom: 1em;
+  overflow-x: auto;
+
+  &_type-1{
+    @include font('MyriadPro',14px,black);          
+    border-bottom: 2px solid #004f99;
+    
+    .button{
+      @include font('MyriadPro',14px,#474747);
+      background: white;
+      border: 1px solid #474747;
+      padding: 0 2px;
+
+      &:hover{
+        background: #e4e4e4;
+      }
+    }
+
+    td, th {          
+        padding: 8px 0;
+        text-align: center;
+        vertical-align: baseline;
+        vertical-align: -webkit-baseline-middle;
+    }
+
+    th{
+      background: #004f99;
+      @include font('MyriadProSemibold',14px,white);      
+    }
+
+  }
+  &_type-2{
+    td, th {
+        padding: 8px 0;
+        text-align: left;
+        vertical-align: baseline;
+        vertical-align: -webkit-baseline-middle;
+        border-top: 1px solid #e4e4e4;
+    }
+
+    th{      
+      @include font('MyriadProSemibold',14px,black);
+      font-weight: bold;
+    }
+  }
+  &_type-3{    
+    @include font('MyriadPro',14px,black);              
+
+    td, th {
+        padding: 8px 0;
+        text-align: center;
+        vertical-align: baseline;
+        vertical-align: -webkit-baseline-middle;        
+    }
+
+    tr{
+      //background: #DEF0D8;
+    }
+  }
+  &_type-text-align-center{
+    td,th{
+      text-align: center;
+    }
+  }
+  &_type-border-none{    
+    border-style: none;
+  }
+}
+
+ol {
+	counter-reset:li; /* Initiate a counter */
+	margin-left:70px;
+  margin-top: 10px;	
+  @include font('MyriadPro',18px,#474747);
+}
+ol > li {
+	position:relative;
+	margin-bottom: 40px;	
+	list-style:none; /* Disable the normal item numbering */	
+}
+ol > li:before {
+	content:counter(li); /* Use the counter as content */
+	counter-increment:li; /* Increment the counter by 1 */
+	/* Position and style the number */
+	position:absolute;
+	top: -5px;
+  left: -70px;		
+	box-sizing:border-box;
+	width:2em;
+	// /* Some space between the number and the content in browsers that support
+	//    generated content but not positioning it (Camino 2 is one example) */
+	// margin-right:8px;
+	// padding:4px;	
+	background: linear-gradient(to right,#3aa837 0%,#045e38 100%);
+  @include font('MyriadPro',25px, white);
+	font-weight:bold;	
+	text-align:center;
+}
+
+ol ol li:last-child {margin-bottom:0;}
+
+.c0 {
+  background: #fcfae6;
+}
+
+.c1 {
+  background: #ececec;
+}
+
+.c2 {
+  background: #dcf6f9;
+}
+
+.c3 {
+  background: #DEF0D8;
+}
+
+.c4 {
+  background: #fadede;
+}

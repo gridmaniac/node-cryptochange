@@ -1,0 +1,47 @@
+block aside
+  aside.left-sidebar
+    .scroll-sidebar
+      nav.sidebar-nav
+        ul#sidebarnav
+          li
+            a.waves-effect(href='/admin')
+              i.fa.fa-university.m-r-10(aria-hidden='true')
+              | Обменник
+          li
+            a.waves-effect(href='/admin/wallets')
+              i.fa.fa-credit-card.m-r-10(aria-hidden='true')
+              | Платежные системы
+          li
+            a.waves-effect(href='/admin/requisites')
+              i.fa.fa-money.m-r-10(aria-hidden='true')
+              | Реквизиты
+          li
+            a.waves-effect(href='/admin/orders')
+              i.fa.fa-list-alt.m-r-10(aria-hidden='true')
+              | Заявки на обмен
+          li
+            a.waves-effect(href='/admin/users')
+              i.fa.fa-users.m-r-10(aria-hidden='true')
+              | Пользователи
+          li
+            a.waves-effect(href='/admin/payouts')
+              i.fa.fa-handshake-o.m-r-10(aria-hidden='true')
+              | Партн. выплаты
+          li
+            a.waves-effect(href='/admin/pages')
+              i.fa.fa-columns.m-r-10(aria-hidden='true')
+              | Страницы сайта
+          li
+            a.waves-effect(href='#')
+              i.fa.fa-book.m-r-10(aria-hidden='true')
+              | Блог
+          li
+            a.waves-effect(href='/admin/preset')
+              i.fa.fa-gears.m-r-10(aria-hidden='true')
+              | Настройки
+          li
+            a.waves-effect(href='#')
+              i.fa.fa-ban.m-r-10(aria-hidden='true')
+              | Блокировки
+        .text-center.m-t-30
+          a.btn.btn-danger(href='/admin/logout') Выход

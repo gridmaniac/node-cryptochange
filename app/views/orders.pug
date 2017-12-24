@@ -1,0 +1,89 @@
+extends ./layouts/main.pug
+block content
+  .content
+    h1.text.text_type-align-center.text_type-margin-bottom-medium Личный кабинет
+    h4.text.text_type-align-center.text_type-margin-bottom-medium
+      | Скидка на обмен:  
+      b #{discount}%
+      |  Всего обменов на: 
+      b #{inflow}$ 
+    .table-wrapper
+      table.table.table_type-1
+        tr
+          th Номер заявки
+          th Направление
+          th Сумма обмена
+          th Получаемая cумма
+          th Статус
+          th
+        if !orders || orders.length == 0
+          tr
+            td(colspan='6') Заявок нет
+        else
+          each order in orders
+            tr(data-toggle='modal' data-target=`#modal-order-details-${order.id}` class=`c${order.status}`)
+              td.text.text_type-font-size-nano
+                a=order.id
+              td
+                .orders__item-direction
+                  img(src=`/i/${order.owallet.icon}`)
+                  .icon-exchange-arrow
+                  img(src=`/i/${order.twallet.icon}`)
+              td #{order.osum} #{order.owallet.code}
+              td #{order.tsum} #{order.twallet.code}
+              if order.status==0
+                td Ожидает оплаты
+              if order.status==1
+                td Ожидает подтверждения
+              if order.status==2
+                td В обработке
+              if order.status==3
+                td Заявка выполнена
+              if order.status==4
+                td Заявка отклонена
+              td
+                .button.hide Повторить
+    each order in orders
+      .modal.fade(role='dialog' id=`modal-order-details-${order.id}`)
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button.close(type='button' data-dismiss='modal') ×
+              h4.modal-title.text.text_type-margin-bottom-medium=`Информация по заявке ${order.id}`
+              .table-wrapper
+                table.table.table_type-3
+                  tr(class=`c${order.status}`)
+                    td=order.id
+                    if order.status==0
+                      td Ожидает оплаты
+                    if order.status==1
+                      td Ожидает подтверждения
+                    if order.status==2
+                      td В обработке
+                    if order.status==3
+                      td Заявка выполнена
+                    if order.status==4
+                      td Заявка отклонена
+                    td=moment(order.data).format('DD.MM.YYYY HH:MM:SS')       
+              h4.text.text_type-align-center.text_type-margin-bottom-big=`Обмен ${order.owallet.title} на ${order.twallet.title}`
+              .table-wrapper
+                table.table.table_type-2
+                  each requisite in order.orequisites
+                    if requisite
+                      tr 
+                        td=requisite.trim()
+                  each requisite in order.trequisites
+                    if requisite
+                      tr 
+                        td=requisite.trim()
+              .table-wrapper
+                table.table.table_type-2.table_type-text-align-center.table_type-border-none
+                  tr
+                    td
+                      b=`Вы отдаете: ${order.osum} ${order.owallet.code}`          
+                    td
+                      b=`Вы получаете: ${order.tsum} ${order.twallet.code}` 
+            .modal-footer
+              button.btn.btn-default(data-dismiss='modal') Закрыть
+block sidebar
+  include ./includes/balance

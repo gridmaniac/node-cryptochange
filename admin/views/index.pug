@@ -1,0 +1,66 @@
+extends layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Обменник
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='javascript:void(0)') Обменник
+          li.breadcrumb-item.active Статистика
+      include ./modules/status
+    .row
+      .col-sm-4
+        .card
+          .card-block
+            h4.card-title Прибыль
+            .text-right
+              h2.font-light.m-b-0
+                i.ti-arrow-up.text-success
+                |  $#{weekIncome}
+              span.text-muted За неделю
+      .col-sm-4
+        .card
+          .card-block
+            h4.card-title Пользователи
+            .text-right
+              h2.font-light.m-b-0
+                i.ti-plus.text-success
+                |  #{monthRegs}
+              span.text-muted За месяц
+            span.text-success #{userRatio}% по реферальной программе
+            .progress
+              .progress-bar.bg-success(role='progressbar', style='width: ' + userRatio + '%; height: 6px;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
+      .col-sm-4
+        .card
+          .card-block
+            h4.card-title Обмены
+            .text-right
+              h2.font-light.m-b-0
+                i.ti-check.text-info
+                |  #{weekOrders}
+              span.text-muted За неделю
+            span.text-info #{dueRatio}% успешных
+            .progress
+              .progress-bar.bg-info(role='progressbar', style='width: ' + dueRatio + '%; height: 6px;', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100')
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            select#balances.custom-select.pull-right
+              each wallet in wallets
+                option(value=wallet.alias)=wallet.title + ' | ' + wallet.code
+            h4.card-title Резервы в динамике
+            .flot-chart
+              #flot-balances.flot-chart-content
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            select#rates.custom-select.pull-right
+              each rate in rates
+                option(value=rate)=rate
+            h4.card-title Курсы валют
+            .flot-chart
+              #flot-rates.flot-chart-content

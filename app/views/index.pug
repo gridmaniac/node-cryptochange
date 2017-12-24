@@ -1,0 +1,145 @@
+extends ./layouts/main.pug
+block content
+  .content.exchange__form        
+    h1.text.text_type-align-center.text_type-margin-bottom-big Обмен #{origin.title} на #{target.title}
+    .exchange__directions-wrapper
+      .exchange__directions
+        each wallet in wallets
+            if wallet.alias == origin.alias
+              #origin.exchange__direction
+                label Вы отдаете
+                .exchange__input-wrapper          
+                  #origin-dropdown.exchange__input
+                    .input
+                      .input__box
+                        #origin-dropdown-selected-item.input__item(data-wallet-alias=wallet.alias)
+                          .input__item-icon
+                            img(src=`/i/${wallet.icon}`)
+                          .input__item-title
+                            p #{wallet.title}
+                        .input__icon
+                          .icon-arrow-down
+                  .input__description
+                    p выберите направление
+                  #origin-dropdown-list.input__dropdown-list
+                    .input__dropdown-list-items
+                      each wallet in wallets
+                        .input__item.input__dropdown-list-item(data-wallet-title=wallet.title data-wallet-alias=wallet.alias data-wallet-min-transfer=wallet.minimum data-wallet-code=wallet.code data-wallet-icon=wallet.icon)
+                          .input__item-icon
+                            img(src=`/i/${wallet.icon}`)
+                          .input__item-title
+                            p #{wallet.title}
+                #sum.exchange__input-wrapper
+                  .exchange__input
+                    .input
+                      .input__box
+                        input#origin-sum(type="number" placeholder="Введите сумму" data-fixto=origin.fixto)                              
+                  #origin-min-transfer.input__description
+                      p min: #{wallet.minimum} #{wallet.code}
+        each wallet in wallets
+          if wallet.alias == target.alias
+            #target.exchange__direction
+              label Вы получаете
+              .exchange__input-wrapper
+                    #target-dropdown.exchange__input
+                      .input
+                        .input__box
+                          #target-dropdown-selected-item.input__item(data-wallet-alias=wallet.alias)
+                            .input__item-icon
+                              img(src=`/i/${wallet.icon}`)
+                            .input__item-title
+                              p #{wallet.title}
+                          .input__icon
+                            .icon-arrow-down
+                    #target-balance.input__description
+                      p Резерв #{wallet.balance.toFixed(wallet.fixto)} #{wallet.code}
+                    #target-dropdown-list.input__dropdown-list
+                      .input__dropdown-list-items
+                        each wallet in wallets
+                          .input__item.input__dropdown-list-item(data-wallet-title=wallet.title data-wallet-alias=wallet.alias data-wallet-balance=wallet.balance data-wallet-code=wallet.code data-wallet-icon=wallet.icon)
+                            .input__item-icon
+                              img(src=`/i/${wallet.icon}`)
+                            .input__item-title
+                              p #{wallet.title}
+              .exchange__input-wrapper
+                .exchange__input
+                  .input
+                    .input__box            
+                      input#target-sum(placeholder="Введите сумму" data-rates=rates data-fixto=target.fixto)
+                .input__description
+                    p 
+                      | Ваша скидка: #{discount}%
+    .exchange__rate
+      p
+        span Курс обмена:
+          if rates
+            =` 1 ${origin.code} - ${rates} ${target.code}`
+    .exchange-requisites
+      .separator
+      #origin-requisites.exchange-requisites__items
+        each requisite in origin.requisites
+          .exchange-requisites__item
+            .exchange-requisites__item-title
+              p #{requisite.title}
+            .exchange-requisites__item-input
+              .input
+                .input__box
+                  input(placeholder=requisite.placeholder)
+                  .input__icon(data-toggle='modal' data-target='#modal-autofill-origin')
+                    .icon-plus
+      .exchange-requisites__item
+        .exchange-requisites__item-title
+          p Ваш email
+        .exchange-requisites__item-input
+          .input
+            .input__box
+              input#email(placeholder="Например: test@mail.com" value=user ? user.email : '' disabled=user ? true : false)
+      #target-requisites.exchange-requisites__items
+        each requisite in target.requisites
+          .exchange-requisites__item
+            .exchange-requisites__item-title
+              p #{requisite.title}
+            .exchange-requisites__item-input
+              .input
+                .input__box
+                  input(placeholder=requisite.placeholder)
+                  .input__icon(data-toggle='modal' data-target='#modal-autofill-target')
+                    .icon-plus
+      .separator
+    if status
+      #submit-exchange.button
+        p Обменять
+    else  
+      p Обмен временно приостановлен
+    .exchange__agreement
+      p 
+        | Нажимая кнопку «обменять», вы соглашаетесь с 
+        a(href='/agreement') правилами 
+        | обмена.
+  
+  #modal-autofill-origin.modal.fade(role='dialog')
+    .modal-dialog.autofill
+      .modal-content
+        .modal-header
+          button.close(data-dismiss='modal') ×
+          h4.modal-title Выберите реквизиты для подстановки
+        .modal-body
+          if !originUserRequisites || originUserRequisites.length == 0
+            p Нет сохраненных реквизитов
+          else
+            each userRequisite in originUserRequisites
+              a.origin-requisite(data-dismiss='modal' data-requisite=userRequisite.values.join(';'))=userRequisite.values[0]
+  #modal-autofill-target.modal.fade(role='dialog')
+    .modal-dialog.autofill
+      .modal-content
+        .modal-header
+          button.close(data-dismiss='modal') ×
+          h4.modal-title Выберите реквизиты для подстановки
+        .modal-body
+          if !targetUserRequisites || targetUserRequisites.length == 0
+            p Нет сохраненных реквизитов
+          else
+            each userRequisite in targetUserRequisites
+              a.target-requisite(data-dismiss='modal' data-requisite=userRequisite.values.join(';'))=userRequisite.values[0]
+block sidebar
+  include ./includes/balance

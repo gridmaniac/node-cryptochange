@@ -1,0 +1,30 @@
+{
+  "name": "blank",
+  "description": "",
+  "main": "gulpfile.js",
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "magnific-popup": "^1.1.0",
+    "slick-carousel": "^1.6.0",
+    "smoothscroll-for-websites": "^1.4.6",
+    "bootstrap": "^3.3.7",
+    "tablesorter": "*"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.min.css",
+        "dist/js/bootstrap.min.js"
+      ]
+    }
+  }
+}

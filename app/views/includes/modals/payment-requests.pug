@@ -1,0 +1,21 @@
+#modal-payment-requests.modal.fade(role='dialog')
+  .modal-dialog.autofill
+    .modal-content
+      .modal-header      
+        button.close(data-dismiss='modal') ×
+        h4.text.text_type-margin-bottom-medium.modal-title Заявки на выплату
+        .table-wrapper
+          table.table.table_type-2
+            tr
+              th №
+              th сумма 
+            if !payouts || payouts.length == 0
+              tr
+                td(colspan='2') Пусто
+            else
+              each payout in payouts           
+                tr
+                  td=payout.ids
+                  td=payout.sum + ' USD'                 
+      .modal-footer
+        a.btn.btn-default(data-dismiss='modal') Закрыть

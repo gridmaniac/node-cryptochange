@@ -1,0 +1,16 @@
+extends ./layouts/main.pug
+block content
+  .content
+    h1.text.text_type-align-center.text_type-margin-bottom-big Восстановление пароля
+    p.text.text_type-align-left.text_type-margin-bottom-medium Введите e-mail указанный при регистрации
+    if message
+      .alert.alert-info=message
+    form(method='post')
+      label Электронная почта
+      .input
+        .input__box
+          input(type='email' name='email' value=email required)
+      br
+      button.button Сбросить пароль
+block sidebar
+  include ./includes/balance

@@ -1,0 +1,70 @@
+extends ./layouts/main.pug
+block content
+  .content
+    h1.text.text_type-align-center.text_type-margin-bottom-small Партнерская программа    
+    p.text.text_type-align-center.text_type-margin-bottom-medium (Текущий процент заработка по реферальной программе: 0.6)
+    ul.button-bar.button-bar_type-1
+      li.button-bar__item.button-bar__item_type-1#affiliate-button-get-banner
+        | Реферальная ссылка
+      //- li.button-bar__item.button-bar__item_type-1#affiliate-button-get-widget
+      //-   | Форма обмена
+      li.button-bar__item.button-bar__item_type-1.button-bar__item_type-1-active#affiliate-button-finance
+        | Финансы
+    .tab-container
+      .tab-container__item#affiliate-tab-get-banner
+        br
+        h3 Ваша партнерская ссылка: http://cryptochange.com?ref=#{user.id}
+      .tab-container__item#affiliate-tab-get-widget
+        p Форма обмена
+      .tab-container__item.tab-container__item_type-active#affiliate-tab-finance
+        br
+        .table-wrapper
+          table.table.table_type-2.text-block
+            tr
+              td Статистика на дату
+              td За все время
+            tr
+              td Переходов по реферальной ссылке:
+              td=usr.followers
+            tr
+              td Зарегистрировалось:
+              td=friends.length
+            tr
+              td Эффективность переходов:
+              - let ef = ((friends.length / usr.followers) * 100).toFixed(0)
+              td=isNaN(ef) ? 0 : ef + '%'
+            tr
+              td Обменов с вознаграждением:
+              td=accruals.length    
+          ul.button-bar.button-bar_type-2
+            li.button-bar__item.button-bar__item_type-2(data-toggle='modal' data-target='#modal-referals-list') Список рефералов
+            li.button-bar__item.button-bar__item_type-2(data-toggle='modal' data-target='#modal-payment-history') История начислений
+            li.button-bar__item.button-bar__item_type-2(data-toggle='modal' data-target='#modal-payment-requests') Заявки на выплату
+          br
+          br
+          h3 Ваши заработанные средства от привлечённых пользователей
+          br
+        .table-wrapper
+          table.table.table_type-2.text-block
+            tr
+              td Всего рефералов
+              td=friends.length
+            tr
+              td
+                b Партнерский баланс
+              td=usr.inflow + ' USD'
+        h3.text.text_type-margin-bottom-medium Создать заявку на выплату
+        form.form(method='post' action='affiliate')
+          .affiliate__payment-request-form
+            .form-group
+              label.text.text_type-margin-bottom-small Сумма
+              input.form-control(type='number' name='sum' required)
+            .form-group
+              label.text.text_type-margin-bottom-small Реквизиты для получения (USD)
+              input.form-control(type='text' name='destination' required)  
+          button.button Создать заявку
+  include ./includes/modals/payment-history
+  include ./includes/modals/payment-requests
+  include ./includes/modals/referals-list
+block sidebar
+  include ./includes/balance

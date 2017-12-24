@@ -1,0 +1,22 @@
+#modal-login.modal.fade(role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button' data-dismiss='modal') ×
+        h4.modal-title Авторизация
+      .modal-body
+        form#auth-form.form(method='post' action='/login')
+          .form-group
+            label E-mail:
+            input.form-control(type='text' name='email' placeholder='mail@yourbox.com' value='')
+          .form-group.m-b-30
+            label Пароль:
+            input.form-control(type='password' name='password' placeholder='*****' value='')
+          br
+          button.form-control Вход
+          br
+        .alert.alert-info#auth-message(style="display:none")
+        .text.text_type-align-center
+          a(href='/forgot') Я забыл пароль
+      .modal-footer
+        a.btn.btn-default(href='/register') У меня еще нет аккаунта

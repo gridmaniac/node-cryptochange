@@ -1,0 +1,17 @@
+#modal-referals-list.modal.fade(role='dialog')
+  .modal-dialog.autofill
+    .modal-content
+      .modal-header      
+        button.close(data-dismiss='modal') ×
+        h4.text.text_type-margin-bottom-medium.modal-title Список рефералов    
+        .table-wrapper
+          table.table.table_type-2
+            tr
+              th Дата регистрации
+              th Электронная почта
+            each friend in friends
+              tr
+                td=moment(friend.date).format('DD.MM.YYYY HH:MM:SS')
+                td=friend.email
+      .modal-footer
+        a.btn.btn-default(data-dismiss='modal') Закрыть

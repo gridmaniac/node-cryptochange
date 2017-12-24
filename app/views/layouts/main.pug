@@ -1,0 +1,12 @@
+doctype html
+html
+  include ../includes/head
+  body
+    .wrapper
+      include ../includes/header
+      .column(class=user ? 'column_type-user-signed-in' : '')
+        block content
+        .sidebar
+          block sidebar
+    include ../includes/footer
+    include ../includes/scripts

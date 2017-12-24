@@ -1,0 +1,13 @@
+doctype html
+html
+  include ./admin/views/includes/head
+  body.fix-header.card-no-border
+    section#wrapper.error-page
+      .error-box
+        .error-body.text-center
+          h1 404
+          h3.text-uppercase Не удалось выполнить действие
+          p.text-muted.m-t-30.m-b-30=e
+          a.btn.btn-info.btn-rounded.waves-effect.waves-light.m-b-40(onclick='history.back()') Сделать, чтобы все работало
+        include ./admin/views/includes/footer
+    include ./admin/views/includes/scripts

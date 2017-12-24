@@ -1,0 +1,21 @@
+if paginate
+  if paginate.hasPreviousPages || paginate.hasNextPages(pageCount)
+    ul.pagination
+      if paginate.hasPreviousPages
+        li
+          a(href=paginate.href({ page: 1 })) <<
+        li
+          a(href=paginate.href(true)) <
+      if pages
+        each page in pages
+          if page.number == currentPage
+            li.active
+              a(href=page.url)= page.number
+          else
+            li
+              a(href=page.url)= page.number
+      if paginate.hasNextPages(pageCount)
+        li
+          a(href=paginate.href()) >
+        li
+          a(href=paginate.href({ page: pageCount })) >>

@@ -1,0 +1,70 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Партнерские выплаты
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item.active Партнерские выплаты
+      include ./modules/status
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            h4.card-title
+              i.fa.fa-filter.text-info
+              span  Быстрый поиск
+            form.form-horizontal.form-material.m-t-30(method='get' action='payouts')
+              .row
+                .form-group.col-lg-3
+                  label.col-md-12(for='email') Пользователь
+                  .col-md-12
+                    input#id.form-control.form-control-line(type='text' name='email' value=query.email)
+                .form-group.col-lg-3
+                  label.col-md-12 Статус выплаты
+                  .col-md-12
+                    select#status.form-control(name='status' value=query.status)
+                      option(value='') Все
+                      option(value='0' selected=query.status=='0') Поступил запрос
+                      option(value='1' selected=query.status=='1') Выплачено
+                      option(value='2' selected=query.status=='2') Запрос отклонен
+                .form-group.col-lg-2.m-t-30
+                  .col-sm-12
+                    button.btn.btn-info.pull-right Применить
+          .card-block
+            h4.card-title Партнерские выплаты
+            .table-responsive
+              table.table.stylish-table(role='payouts')
+                thead
+                  tr
+                    th Пользователь
+                    th Реквизиты для выплаты
+                    th Сумма
+                    th
+                tbody(style="cursor:pointer")
+                  if !payouts || payouts.length == 0
+                    tr
+                      td Отсутствуют
+                  else
+                    each payout in payouts
+                      tr
+                        td
+                          a(href=`/admin/users/${payout.user}`)=payout.user.email
+                        td=payout.destination
+                        td=payout.sum + ' USD'
+                        td
+                          if payout.status == 0
+                            a.btn.btn-success(href=`/admin/payouts/confirm/${payout.id}`)
+                              i.ti-check
+                            | &nbsp;
+                            a.btn.btn-danger(href=`/admin/payouts/reject/${payout.id}`)
+                              i.ti-face-sad
+                          if payout.status == 1
+                            | Выплачено
+                          if payout.status == 2
+                            | Запрос отклонен
+          .card-block
+            include ./modules/pagination

@@ -1,0 +1,97 @@
+extends ./layouts/main.pug
+block content
+  .content
+    .order
+      h1.text.text_type-align-center.text_type-margin-bottom-big Заявка 
+        span.order__id №#{order.id}
+      h4.text.text_type-align-center.text_type-margin-bottom-medium Пожалуйста, проверьте введенные Вами данные и следуйте по шагам указанным ниже.
+      .separator
+      .order__details
+        div.order__direction
+          h4 Вы отдаете
+          .order__wallet
+            .order__wallet-icon
+              img(src=`/i/${order.owallet.icon}`)
+            .order__wallet-name
+              p=order.owallet.title
+          p сумма: #{order.osum} #{order.owallet.code}
+        div.order__direction
+          h4 Вы получаете
+          .order__wallet
+            .order__wallet-icon
+              img(src=`/i/${order.twallet.icon}`)
+            .order__wallet-name
+              p=order.twallet.title
+          p сумма: #{order.tsum} #{order.twallet.code}
+      .order__rate
+        h4.text.text_type-align-center.text_type-margin-bottom-medium курс обмена: 1 #{order.owallet.code} - #{order.rates} #{order.twallet.code}
+      if showPayment
+        .separator
+        .order__instructions
+          h4.text.text_type-align-center.text_type-margin-bottom-medium Для завершения заявки вам необходимо:        
+          |!{payment}
+      if showEvidence
+        .separator
+        div.evimark
+          |!{order.owallet.evimark}
+        br
+      if showWaitVerification
+        .alert-block          
+          p.alert-block__title Идет проверка платежного средства...
+          p После проверки страница обновится автоматически.
+          p При успешном подтверждении Вы сможете завершить обмен.
+          script.
+            setInterval(() => location.reload(), 25000)
+          a(href=`/account/orders/dismiss/${order.id}`) Отменить заявку
+      if showVerification
+        .alert-block          
+          p.alert-block__title Загрузить документ
+          p Выберите файл и нажмите Отправить
+          .form
+              input#order-id(name='id' type='hidden' value=order.id)
+              br
+              input#document(type='file' style='margin: 0 auto' required)
+              button#upload-document.button.order__confirm-button Загрузить
+          a(href=`/account/orders/dismiss/${order.id}`) Отменить заявку
+      if showPayButton
+        .separator
+        .alert-block          
+          p.alert-block__title Обязательно!
+          p После оплаты нажать кнопку
+          form(method='post' action='/account/orders/ready')
+              input(name='id' type='hidden' value=order.id)
+              button.button.order__confirm-button Я оплатил
+          a(href=`/account/orders/dismiss/${order.id}`) Отменить заявку
+block sidebar
+  .sidebar__item
+    h4.text.text_type-align-center.text_type-margin-bottom-medium Статус
+    .alert-block
+      if order.status==0
+        p.order__status Ожидает оплаты
+      if order.status==1
+        p.order__status Ожидает подтверждения
+      if order.status==2
+        p.order__status В обработке
+      if order.status==3
+        p.order__status Заявка выполнена
+      if order.status==4
+        p.order__status Заявка отклонена
+  if order.status == 0
+    .sidebar__item
+      h4.text.text_type-align-center.text_type-margin-bottom-medium Осталось: 
+        span.order__timeleft(data-date=order.date data-lifetime=orderLifetime)
+          span#timeleft-mins 00
+          |  мин. 
+          span#timeleft-secs 00
+          |  сек.
+      .separator    
+      p По истечению таймера заявка автоматически отменяется
+  .sidebar__item
+    h4.text.text_type-align-center.text_type-margin-bottom-medium Дополнительно:
+    p 
+      |Если у Вас возникли сложности или есть вопросы, напишите в нашу
+      br
+      a службу поддержки
+      br
+      |С уважением, администрация сайта!
+    

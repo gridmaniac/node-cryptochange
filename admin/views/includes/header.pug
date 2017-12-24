@@ -1,0 +1,16 @@
+block header
+  header.topbar
+    nav.navbar.top-navbar.navbar-toggleable-sm.navbar-light
+      .navbar-header
+        a.navbar-brand(href='/admin')
+          img.dark-logo(src='/admin/assets/logo.png')
+      .navbar-collapse
+        ul.navbar-nav.mr-auto.mt-md-0
+          li.nav-item
+            a.nav-link.nav-toggler.hidden-md-up.text-muted.waves-effect.waves-dark(href='javascript:void(0)')
+              i.ti-menu
+        ul.navbar-nav.my-lg-0
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle.text-muted.waves-effect.waves-dark(href='', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+              img.profile-pic.m-r-5(src='/admin/assets/images/users/5.jpg', alt='user')
+              =user.email

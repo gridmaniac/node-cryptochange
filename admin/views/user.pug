@@ -1,0 +1,144 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0=usr.email
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item
+            a(href='/admin/users') Пользователи
+          li.breadcrumb-item.active=usr.email
+      include ./modules/status
+    .row
+      .col-lg-5.col-xlg-4.col-md-12
+        .card
+          .card-block
+            center.m-t-30
+              img.img-circle(src='../assets/images/users/5.jpg', width='150')
+              h4.card-title.m-t-10=usr.email
+              h6.card-subtitle
+                if (usr.role)
+                  |Администратор
+                else
+                  |Пользователь
+              .row.text-center.justify-content-md-center
+                .col-4
+                  a.link(href=`/admin/users?referrer=${usr.email}` title='Пригласил')
+                    i.icon-people
+                    br
+                    font.font-medium=count
+                .col-4
+                  a.link(href=`/admin/orders?user=${usr.email}&status=3` title='Сумма обменов')
+                    i.icon-wallet
+                    br
+                    font.font-medium='$' + usr.inflow
+                .col-4
+                  a.link(href=`/admin/payouts?user=${usr.email}&status=1` title='Партнерский баланс')
+                    i.fa.fa-handshake-o
+                    br
+                    font.font-medium='$' + usr.accrual
+        .card
+          .card-block
+            h4.card-title Партнерские начисления
+            .table-responsive
+              table.table.stylish-table
+                thead
+                  tr
+                    th Тип
+                    th Дата
+                    th Источник
+                    th Сумма
+                tbody(style="cursor:pointer")
+                  if !accruals || accruals.length == 0
+                    tr
+                      td(colspan='4') Нет начислений
+                  else
+                    each accrual in accruals
+                      tr(onclick=`location='/admin/` + (accrual.type == 0 ? 'orders/' + accrual.source : 'payouts/' + accrual.source) + `'`)
+                        td
+                          if accrual.type == 0
+                            i.ti-plus.text-success
+                          else
+                            i.ti-envelope.text-info
+                        td=moment(accrual.date).format('DD.MM.YY')
+                        
+                        td
+                          if accrual.type == 0
+                            | Обмен
+                          else
+                            | Выплата
+                        td=accrual.sum + ' USD'
+        .card-block
+          include modules/pagination
+      .col-lg-7.col-xlg-8.col-md-12
+        .card
+          .card-block
+            form.form-horizontal.form-material(method='post' action='update')
+              .form-group
+                label.col-md-12(for='email') Email
+                .col-md-12
+                  input#email.form-control.form-control-line(type='email' name='email' value=usr.email)
+              .form-group
+                label.col-sm-12 Роль
+                .col-sm-12
+                  select#role.form-control.form-control-line(name='role')
+                    option(value='false' selected=usr.role) Пользователь
+                    option(value='true' selected=usr.role) Администратор
+              .form-group
+                .col-sm-12
+                  input(type='hidden' name='id' value=usr.id)
+                  button.btn.btn-info Сохранить
+        .card
+          .card-block
+            h4.card-title Реквизиты
+            .table-responsive
+              table.table.stylish-table
+                thead
+                  tr
+                    th(colspan='2') Наименование
+                    th Данные
+                    th Документ
+                    th Подтверждение
+                    th
+                tbody(style='cursor:pointer')
+                  if !requisites || requisites.length == 0
+                    tr
+                      td Отсутствуют
+                  else
+                    each requisite in requisites
+                      tr
+                        td(style='width:50px;')
+                          span
+                            img(src='/i/' + requisite.wallet.icon)
+                        td
+                          h6=requisite.wallet.title
+                          small.text-muted=requisite.wallet.code
+                        td=requisite.values.join(', ')
+                        td
+                          if requisite.evidence
+                            a(href='/evidence/' + requisite.evidence target='blank')
+                              i.icon-doc
+                        td
+                          if requisite.wallet.verification && requisite.phase == 0
+                            | Требуется документ
+                          if requisite.wallet.verification && requisite.phase == 1
+                            a.btn.btn-success(href=`/admin/users/requisites/verify/${requisite.id}`)
+                              i.ti-check
+                            | &nbsp;
+                            a.btn.btn-danger(href=`/admin/users/requisites/prohibit/${requisite.id}`)
+                              i.ti-face-sad
+                          if requisite.wallet.verification && requisite.phase == 2
+                            | Подтвержден
+                          if requisite.wallet.verification && requisite.phase == 3
+                            | Отклонен
+                          if !requisite.wallet.verification
+                            | Не требуется
+                        td
+                          form(method='post' action='/admin/users/requisites/remove' id=`remove-${requisite.id}`)
+                            input(type='hidden' name='id' value=requisite.id)
+                            input(type='hidden' name='user' value=usr.id)
+                            a.trash(href='javascript:void(0);' onclick=`if (confirm('Подтвердите действие')) document.getElementById('remove-${requisite.id}').submit()`)
+                              i.fa.fa-trash-o.text-danger

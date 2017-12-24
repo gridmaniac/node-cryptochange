@@ -1,0 +1,59 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0= pending ? 'Новый реквизит' : requisite.title
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item
+            a(href='/admin/requisites') Реквизиты
+          li.breadcrumb-item.active= pending ? 'Новый реквизит' : requisite.title
+      include ./modules/status
+    .row
+      .col-sm-8
+        .card
+          .card-block
+            form.form-horizontal.form-material(method="post")
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='title') Наименование
+                  .col-md-12
+                    input#title.form-control.form-control-line(type='text' name="title" value=requisite.title)
+                .form-group.col-lg-6
+                  label.col-md-12(for='alias') Псевдоним
+                  .col-md-12
+                    input#alias.form-control.form-control-line(type='text' name="alias" value=requisite.alias)
+              .row
+                .form-group.col-md-6
+                  label.col-md-12(for='placeholder') Плейсхолдер
+                  .col-md-12
+                    input#placeholder.form-control.form-control-line(type='text' name="placeholder" value=requisite.placeholder)
+                .form-group.col-md-6
+                  label.col-md-12(for='message') Сообщение при ошибке
+                  .col-md-12
+                    input#message.form-control.form-control-line(type='text' name="message" value=requisite.message)
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='validator') Валидатор
+                  .col-md-12
+                    input#validator.form-control.form-control-line(type='text' name="validator" value=requisite.validator)
+                .form-group.col-lg-6
+                  label.col-md-1(for='icon') Проверить
+                  .col-md-12.input-group
+                    input#validate.form-control.form-control-line(type='text' value="")
+                    span#validate-icon.input-group-btn.input-add
+                      .btn.btn-info
+                        i.fa.fa-pencil-square-o
+              .form-group
+                .col-sm-12
+                  if !pending
+                    input(type="hidden" name="id" value=requisite.id)
+                  button.btn.btn-info.pull-left(type="submit" formaction=pending ? '' : 'update') Сохранить
+                  if !pending
+                    if requisite.involved
+                      .pull-right.text-success Используется
+                    else
+                      button.btn.btn-danger.pull-right(type="submit" formaction='remove') Удалить

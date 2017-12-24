@@ -1,0 +1,25 @@
+extends ./layouts/main.pug
+block content
+  form#signup-form.content(method="post" action="/signup")
+    h1.text.text_type-align-center.text_type-margin-bottom-medium Регистрация
+    h4.text.text_type-align-left.text_type-margin-bottom-medium Введите данные
+    .input
+      .input__box
+        input#email(placeholder="E-mail" name="email")
+    br
+    .input
+      .input__box
+        input#password(placeholder="Пароль" type="password" name="password")
+    br
+    .input
+      .input__box
+        input#retry(placeholder="Пароль повторно" type="password" name="retry")
+    .exchange__agreement
+      p 
+        | Нажимая кнопку «Зарегистрироваться», вы соглашаетесь с 
+        a(href='/agreement' target='blank') правилами 
+        | обмена.
+    br
+    button.button Зарегистрироваться
+block sidebar
+  include ./includes/balance

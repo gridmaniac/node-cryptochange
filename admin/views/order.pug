@@ -1,0 +1,116 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Заявка №#{order.id}
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin/') Обменник
+          li.breadcrumb-item
+            a(href='/admin/orders') Заявки на обмен
+          li.breadcrumb-item.active Заявка №#{order.id}
+      include ./modules/status
+    .row
+      .col-xl-8.col-lg-12
+        .card
+          .card-block
+            form.form-horizontal.form-material(method="post")
+              .row
+                .col-lg-6
+                  .form-group
+                    label.col-md-12(for='alias') Пользователь
+                    .col-12
+                      if order.user
+                        a(href=`/admin/users/${order.user.id}`)=order.user.email
+                  .form-group
+                    label.col-md-12(for='origin') Отдаваемая валюта
+                    .col-12
+                      select#origin.form-control(name="origin")
+                        each wallet in wallets
+                          option(value=wallet.id selected=order.owallet.id==wallet.id)=wallet.title
+                  .form-group
+                    label.col-12(for='osum') Сумма обмена (
+                      span.text-info=cts(order.owallet.code)
+                      | )
+                    .col-12
+                      input#osum.form-control.form-control-line(type='number' step='0.000000000001' name="osum" value=order.osum)
+                  .form-group
+                    label.col-12 Платежная информация 
+                      if order.owallet.verification && order.phase == 0
+                        i.text-warning.fa.fa-exclamation
+                      if order.owallet.verification && order.phase == 1
+                        a.text-success.fa.fa-file(href='/evidence/' + order.evidence target='blank')
+                      if order.owallet.verification && order.phase == 2
+                        i.text-success.fa.fa-check
+                      if order.owallet.verification && order.phase == 3
+                        i.text-warning.fa.fa-exclamation
+                      if !order.owallet.verification  
+                        i.text-success.fa.fa-check
+                    .col-12
+                      div=order.orequisites.join(', ')
+                      if order.owallet.verification && order.phase == 1
+                        a.btn.btn-success(href=`/admin/orders/requisites/verify/${order.id}`)
+                          i.ti-check
+                        | &nbsp;
+                        a.btn.btn-danger(href=`/admin/orders/requisites/prohibit/${order.id}`)
+                          i.ti-face-sad
+                  .form-group
+                    label.col-12 Реквизиты для вывода
+                    .col-12
+                      div=order.trequisites.join(', ')
+                .col-lg-6
+                  .form-group
+                    label.col-12(for='verification') Курс обмена
+                    .col-12
+                      span 1 
+                        span.text-info=cts(order.owallet.code)
+                        |  = #{order.rates} 
+                        span.text-info=cts(order.twallet.code)
+                  .form-group
+                    label.col-md-12(for='verification2') Получаемая валюта
+                    .col-12
+                      select#target.form-control(name="target")
+                        each wallet in wallets
+                          option(value=wallet.id selected=order.twallet.id==wallet.id)=wallet.title
+                  .form-group
+                    label.col-md-12(for='tsum') Получаемая сумма (
+                      span.text-info=cts(order.twallet.code)
+                      span ) 
+                        small с уч. скидки #{discount}%
+                    .col-12
+                      input#tsum.form-control.form-control-line(type='number' step='0.000000000001' name="tsum" value=order.tsum)
+                  .form-group
+                    label.col-md-12(for='status') Статус заявки
+                    .col-12
+                      if order.status == 0
+                        div Ожидает оплаты
+                      if order.status == 1
+                        .form-group Ожидает подтверждения
+                        a.btn.btn-primary(href=`/admin/orders/accept/${order.id}`) Начать обработку
+                      if order.status == 2
+                        if order.operator && user.email == order.operator.email
+                          .form-group В обработке
+                          a.btn.btn-success(href=`/admin/orders/close/${order.id}`) Выполнить
+                          span &nbsp;
+                          a.btn.btn-danger(href=`/admin/orders/dismiss/${order.id}`) Отклонить
+                        else
+                          div В обработке: 
+                            a(href=`/admin/users/${order.operator.id}`)=order.operator.email
+                      if order.status == 3
+                        div Заявка выполнена
+                        div Выполнил: 
+                          a(href=`/admin/users/${order.operator.id}`)=order.operator.email
+                      if order.status == 4
+                        div Заявка отклонена
+                        div Отклонил: 
+                          if (order.operator)
+                            a(href=`/admin/users/${order.operator.id}`)=order.operator.email
+                          else
+                            | Пользователь
+              .form-group
+                .col-12
+                  input(type='hidden' name='id' value=order.id)
+                  button.btn.btn-danger.pull-left(type='submit' formaction='remove') Удалить
+                  button.btn.btn-info.pull-right(type='submit' formaction='update') Обновить

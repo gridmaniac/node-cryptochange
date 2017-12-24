@@ -1,0 +1,143 @@
+extends layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-8.col-md-6.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0= pending ? 'Новая система' : wallet.title
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item
+            a(href='/admin/wallets') Платежные системы
+          li.breadcrumb-item.active= pending ? 'Новая система' : wallet.title
+      include ./modules/status
+    .row
+      if !pending
+        .col-xlg-3.col-lg-4.col-md-12
+          .card
+            .card-block
+              center.m-t-30
+                img(src=`/i/${wallet.icon}` width="25")
+                h4.card-title.m-t-10= wallet.title
+                h6.card-subtitle= wallet.code
+                .form-horizontal.form-material
+                  .form-group
+                    label.col-md-12(for='balance') Баланс
+                    input#balance.form-control.form-control-line(type="number" step="0.01" form="main-form" name="balance" value=parseFloat(wallet.balance.toFixed(wallet.fixto)))
+                .row.text-center.justify-content-md-center
+                  .col-12
+                    i.icon-shield
+                    br
+                    font.font-medium=parseFloat(withheld.toFixed(wallet.fixto)) + ' '
+                      span.text-info=cts(wallet.code)
+          .card
+            .card-block
+              if wallet.active
+                a.btn.btn-success.col-lg-12(href=`deactivate?id=${wallet.id}`) Активна
+              else
+                a.btn.btn-danger.col-lg-12(href=`activate?id=${wallet.id}`) Не активна
+      .col-xlg-9.col-lg-8.col-md-12
+        include ./modules/messages
+        .card
+          .card-block
+            form#main-form.form-horizontal.form-material(method='post')
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='title') Наименование
+                  .col-12
+                    input#title.form-control.form-control-line(type='text' name='title' value=wallet.title)
+                .form-group.col-lg-6
+                  label.col-md-12(for='alias') Псевдоним
+                  .col-12
+                    input#alias.form-control.form-control-line(type='text' name='alias' value=wallet.alias)
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='code') Код
+                  .col-12
+                    input#code.form-control.form-control-line(type='text' name='code' value=wallet.code)
+                .form-group.col-lg-6
+                  label.col-md-1(for='icon') Иконка
+                  .col-12.input-group
+                    input#icon.form-control.form-control-line(type='text' name='icon' value=wallet.icon)
+                    input#icon-file.hide(type="file")
+                    span#upload-icon.input-group-btn.input-add
+                      .btn.btn-success
+                        i.fa.fa-file-image-o
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='minimum') Минимальная сумма
+                  .col-12
+                    input#minimum.form-control.form-control-line(type='number' step='0.0000001' name='minimum' value=wallet.minimum)
+                .form-group.col-lg-6
+                  label.col-md-12(for='maximum') Максимальная сумма
+                  .col-12
+                    input#maximum.form-control.form-control-line(type='number' step='0.0000001' name='maximum' value=wallet.maximum)
+                .form-group.col-lg-6
+                  label.col-md-12(for='minimum') Комиссия (%)
+                  .col-12
+                    input#fee.form-control.form-control-line(type='number' step='0.001' name='fee' value=wallet.fee)
+                .form-group.col-lg-6
+                  label.col-md-12(for='verification') Подтверждение
+                  .col-12
+                    select#verification.form-control(name='verification')
+                      option(value='false' selected=wallet.verification) Нет
+                      option(value='true' selected=wallet.verification) Да
+                .form-group.col-lg-6
+                  label.col-md-12(for='fixto') Приближение
+                  .col-12
+                    input#fixto.form-control.form-control-line(type='number' name='fixto' value=wallet.fixto)
+                .form-group.col-lg-6
+                  label.col-md-12(for='sort') Порядковый номер
+                  .col-12
+                    input#sort.form-control.form-control-line(type='number' name='sort' value=wallet.sort)
+                .form-group.col-lg-6
+                  label.col-md-12(for='paybutton') Кнопка "Я оплатил"
+                  .col-12
+                    select#paybutton.form-control(name='paybutton')
+                      option(value='false' selected=wallet.paybutton) Нет
+                      option(value='true' selected=wallet.paybutton) Да
+              .form-group
+                label.col-md-12 Набор реквизитов
+                .col-lg-12
+                  select#requisites(multiple='multiple' name='requisites')
+                    each requisite in requisites
+                      option(value=requisite.id selected=!pending && wallet.requisites.indexOf(requisite.id) > -1)=requisite.title + ' | ' + requisite.alias
+              .form-group
+                label.col-md-12 Автоподстановка
+                label.col-md-12
+                  b {{id}}
+                  span  - код обмена
+                label.col-md-12
+                  b {{sum}}
+                  span  - сумма обмена
+                label.col-md-12
+                  b {{description}}
+                  span  - описание обмена
+                label.col-md-12
+                  b &lt;ol&gt;, &lt;li&gt;
+                  span  - перечисление шагов
+              .form-group
+                label.col-md-12 Код оплаты
+                .col-md-12
+                  textarea#embedded.form-control.form-control-line(rows='10' name='embedded') 
+                    =wallet.embedded
+              .form-group
+                label.col-md-12 Предпросмотр
+                .col-md-12
+                  pre
+                    code#embedded-preview.html
+              .form-group
+                  label.col-md-12(for='hashplate') Шаблон подписи SCI
+                  .col-12
+                    input#hashplate.form-control.form-control-line(type='text' name='hashplate' value=wallet.hashplate)
+              .form-group
+                label.col-md-12 Проверка платежного средства
+                input#content(type='hidden' name='evimark' value=wallet.evimark)
+                .col-md-12
+                .summernote
+              .form-group
+                .col-sm-12
+                  if !pending
+                    input(type="hidden" name="id" value=wallet.id)
+                  button.btn.btn-info.pull-left(type="submit" formaction=pending ? '' : 'update') Сохранить

@@ -1,0 +1,6 @@
+extends ./layouts/main.pug
+block content
+  .content.page(class=page.param)
+    |!{page.content}
+block sidebar
+  include ./includes/balance

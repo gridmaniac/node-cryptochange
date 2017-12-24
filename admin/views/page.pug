@@ -1,0 +1,60 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0= pending ? 'Новая страница' : page.title
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item
+            a(href='/admin/pages') Страницы сайта
+          li.breadcrumb-item.active= pending ? 'Новая страница' : page.title
+      include ./modules/status
+    .row
+      .col-sm-8
+        .card
+          .card-block
+            form.form-horizontal.form-material(method='post')
+              .row
+                .form-group.col-lg-12
+                  label.col-md-12(for='title') Название
+                  .col-md-12
+                    input#title.form-control.form-control-line(type='text' name='title' value=page.title)
+                .form-group.col-lg-12
+                  label.col-md-12(for='description') Описание
+                  .col-md-12
+                    input#description.form-control.form-control-line(type='text' name='description' value=page.description)
+              .row
+                .form-group.col-lg-6
+                  label.col-md-12(for='path') Путь
+                  .col-md-12
+                    input#path.form-control.form-control-line(type='text' name='path' value=page.path)
+                .form-group.col-md-6
+                  label.col-md-12(for='verification') Активна
+                  .col-12
+                    select#active.form-control(name='active')
+                      option(value="false" selected=page.active && page.active.toString()=='false') Нет
+                      option(value="true" selected=page.active && page.active.toString()=='true') Да
+              .row
+                .form-group.col-md-6
+                  label.col-md-12(for='tag') Категория
+                  .col-md-12
+                    input#tag.form-control.form-control-line(type='text' name='tag' value=page.tag)
+                .form-group.col-lg-6
+                  label.col-md-12(for='param') Доп. параметр
+                  .col-md-12
+                    input#param.form-control.form-control-line(type='text' name='param' value=page.param)
+              .form-group
+                label.col-md-12 Содержимое
+                input#content(type='hidden' name='content' value=page.content)
+                .col-md-12
+                .summernote
+              .form-group
+                .col-sm-12
+                  if !pending
+                    input(type="hidden" name="id" value=page.id)
+                  button.btn.btn-info.pull-left(type="submit" formaction=pending ? '' : 'update') Сохранить
+                  if !pending
+                    button.btn.btn-danger.pull-right(type="submit" formaction='remove') Удалить

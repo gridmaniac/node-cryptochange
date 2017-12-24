@@ -1,0 +1,47 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Страницы сайта
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin') Обменник
+          li.breadcrumb-item.active Страницы сайта
+      include ./modules/status
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            h4.card-title Страницы сайта
+            .table-responsive
+              table.table.stylish-table(role='pages')
+                thead
+                  tr
+                    th Название
+                    th Активна
+                    th Категория
+                    th
+                tbody(style="cursor:pointer")
+                  if !pgs || pgs.length == 0
+                    tr
+                      td(colspan='3') Нет добавленных страниц
+                  else
+                    each page in pgs
+                      tr(onclick=`location='/admin/pages/${page.id}'`)
+                        td
+                          h6=page.title
+                          small.text-muted=page.path
+                        td
+                          if page.active
+                            i.ti-check.text-primary
+                        td=page.tag
+                        td
+                          form(method='post' action='/admin/pages/remove' id=`remove-${page.id}`)
+                            input(type='hidden' name='id' value=page.id)
+                            a.trash(href='javascript:void(0);' onclick=`if (confirm('Подтвердите действие')) document.getElementById('remove-${page.id}').submit()`)
+                              i.fa.fa-trash-o.text-danger
+            a.btn.btn-success.pull-right(href="/admin/pages/new") Добавить
+          .card-block
+            include ./modules/pagination

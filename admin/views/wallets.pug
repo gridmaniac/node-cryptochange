@@ -1,0 +1,48 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Платежные системы
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin/') Обменник
+          li.breadcrumb-item.active Платежные системы
+      include ./modules/status
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            h4.card-title Платежные системы
+            .table-responsive.m-t-40
+              table.table.stylish-table
+                thead
+                  tr
+                    th(colspan='2') Наименование
+                    th Активна
+                    th Подтверждение
+                    th Баланс
+                tbody(style="cursor:pointer")
+                  if !wallets || wallets.length == 0
+                    tr
+                      td(colspan='5') Нет добавленных систем
+                  else
+                    each wallet in wallets
+                      tr(onclick=`location='/admin/wallets/${wallet.id}'`)
+                        td(style='width:50px;')
+                          span
+                            img(src=`/i/${wallet.icon}`)
+                        td
+                          h6=wallet.title
+                          small.text-muted=code
+                        td
+                          if wallet.active
+                            i.ti-check.text-success
+                        td
+                          if wallet.verification
+                            i.ti-check.text-primary
+                        td=wallet.balance
+                          | &nbsp;
+                          span.text-info=cts(wallet.code)
+            a.btn.btn-success.pull-right(href="/admin/wallets/new") Добавить

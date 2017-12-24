@@ -1,0 +1,111 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Заявки на обмен
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin/') Обменник
+          li.breadcrumb-item.active Заявки на обмен
+      include ./modules/status
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            h4.card-title
+              i.fa.fa-filter.text-info
+              span  Быстрый поиск
+            form.form-horizontal.form-material.m-t-30(method='get' action='orders')
+              .row
+                .form-group.col-lg-3
+                  label.col-md-12(for='id') Номер заявки
+                  .col-md-12
+                    input#id.form-control.form-control-line(type='text' name='id' value=query.id)
+                .form-group.col-lg-4
+                  label.col-md-12(for='email') Пользователь
+                  .col-md-12
+                    input#email.form-control.form-control-line(type='text' name='user' value=query.user)
+                .form-group.col-lg-3
+                  label.col-md-12(for='status') Статус
+                  .col-md-12
+                    select#status.form-control(name="status" value=query.status)
+                      option(value='') Не используется
+                      option(value='0' selected=query.status==0) Ожидает оплаты
+                      option(value='1' selected=query.status==1) Ожидает подтверждения
+                      option(value='2' selected=query.status==2) В обработке
+                      option(value='3' selected=query.status==3) Заявка выполнена
+                      option(value='4' selected=query.status==4) Заявка отклонена
+                .form-group.col-lg-2.m-t-30
+                  .col-sm-12
+                    button.btn.btn-info.pull-right Применить
+          .card-block
+            h4.card-title Заявки на обмен
+            .table-responsive
+              table.table.stylish-table(role='orders')
+                thead
+                  tr
+                    th #
+                    th(role="direction") Направление
+                    th Сумма обмена
+                    th Получаемая сумма
+                    th(role="status") Статус
+                    th Пользователь
+                    th.text-right Создана
+                    th
+                tbody(style="cursor:pointer")
+                  if !orders || orders.length == 0
+                    tr
+                      td(colspan='7') Нет заявок
+                  else
+                    each order in orders
+                      tr(onclick=`location='/admin/orders/${order.id}'`)
+                        td=order.id
+                        td
+                          .row
+                            .col-1.m-t-10
+                              span
+                                img(src=`/i/${order.owallet.icon}`)
+                            .col-4.m-t-10
+                              h6=order.owallet.title
+                              small.text-muted=order.owallet.code
+                            .col-2.text-center.m-t-15
+                              i.fa.fa-arrow-right
+                            .col-1.m-t-10
+                              span
+                                img(src=`/i/${order.twallet.icon}`)
+                            .col-4.m-t-10
+                              h6=order.twallet.title
+                              small.text-muted=order.twallet.code
+                        td=order.osum
+                          | 
+                          span.text-info=cts(order.owallet.code)
+                        td=order.tsum
+                          | 
+                          span.text-info=cts(order.twallet.code)
+                        td
+                          if order.status==0
+                            span.label.label-warning Ожидает оплаты
+                          if order.status==1
+                            span.label.label-primary Ожидает подтверждения
+                          if order.status==2
+                            span.label.label-info В обработке
+                          if order.status==3
+                            span.label.label-success Заявка выполнена
+                          if order.status==4
+                            span.label.label-danger Заявка отклонена
+                        td
+                          if order.user
+                            a(href=`/admin/users/${order.user.id}`)=order.user.email
+                        td.text-right
+                          =moment(order.date).format('DD.MM.YYYY')
+                          br
+                          =moment(order.date).format('HH:MM:SS')
+                        td
+                          form(method='post' action='/admin/orders/remove' id=`remove-${order.id}`)
+                            input(type='hidden' name='id' value=order.id)
+                            a.trash(href='javascript:void(0);' onclick=`if (confirm('Подтвердите действие')) document.getElementById('remove-${order.id}').submit()`)
+                              i.fa.fa-trash-o.text-danger
+          .card-block
+            include modules/pagination

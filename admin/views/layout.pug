@@ -1,0 +1,14 @@
+doctype html
+html
+  include ./includes/head
+  body.fix-header.fix-sidebar.card-no-border
+    .preloader
+      svg.circular(viewbox='25 25 50 50')
+        circle.path(cx='50', cy='50', r='20', fill='none', stroke-width='2', stroke-miterlimit='10')
+    #main-wrapper
+      include ./includes/header
+      include ./includes/aside
+      .page-wrapper
+        block content
+        include ./includes/footer
+    include ./includes/scripts

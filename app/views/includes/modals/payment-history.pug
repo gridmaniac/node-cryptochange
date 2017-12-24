@@ -1,0 +1,19 @@
+#modal-payment-history.modal.fade(role='dialog')
+  .modal-dialog.autofill
+    .modal-content
+      .modal-header      
+        button.close(data-dismiss='modal') ×
+        h4.text.text_type-margin-bottom-medium.modal-title История начислений
+        .table-wrapper
+          table.table.table_type-2
+            tr
+                th Дата и время
+                th Пользователь
+                th Сумма
+            each accrual in accruals
+              tr
+                td=moment(accrual.date).format('DD.MM.YYYY HH:MM:SS')
+                td=accrual.originator
+                td=accrual.sum + ' USD'
+      .modal-footer
+        a.btn.btn-default(data-dismiss='modal') Закрыть

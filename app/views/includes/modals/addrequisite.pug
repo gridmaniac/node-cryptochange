@@ -1,0 +1,23 @@
+#modal-add-requisite.modal.fade(role='dialog')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button' data-dismiss='modal') ×
+        h4.modal-title Выберите платежную систему
+      .modal-body
+        select#wallet-requisites.form-control
+          each wallet in wallets
+            option(value=wallet.alias)=wallet.title + ' ' + wallet.code
+        .modal-addrequisite__wallet
+          img#wallet-icon(src='/i/' + wallet.icon)
+          p#wallet-title='Создать шаблон автозаполнения ' + wallet.title + ' ' + wallet.code
+        #requisites.form
+          each requisite in wallet.requisites
+            .form-group
+              label=requisite.title
+              input.requisite.form-control(type='text' placeholder=requisite.placeholder)
+        br
+        input#wallet-alias(type='hidden' value=wallet.alias)
+        button#add-requisite.form-control Добавить
+      .modal-footer
+        a.btn.btn-default(data-dismiss='modal') Закрыть

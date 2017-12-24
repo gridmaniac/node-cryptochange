@@ -1,0 +1,28 @@
+extends ./layouts/main.pug
+block content
+  .content
+    h1.text.text_type-align-center.text_type-margin-bottom-big Контакты
+    .text-block
+      p Уважаемые пользователи, качественную и оперативную поддержку Вы сможете получить обратившись на:
+      p
+        | Mail: 
+        a(href='mailto:support@cryptochange.com') support@cryptochange.com
+      p 
+        | Jabber: 
+        a(href='mailto:jabber@cryptochange.com') jabber@cryptochange.com
+      p 
+        | Telegram: 
+        a(href='https://telegram.me/cryptochange_bot') @cryptochange_bot
+      p 
+        | Для  более оперативного решения вопроса Вы можете обратиться в наш круглосуточный онлайн чат, и компетентные специалисты cryptochange.com ответят на любые интересующие Вас вопросы.
+        br
+        | Так же рекомендуем Вам ознакомиться с разделом 
+        a(href='/help') "Помощь"
+        | , где вы сможете найти ответы на самые распостраненные вопросы.
+        br
+        | Мы рады будем предоставить персональные условия обмена для наших постоянных клиентов с крупным оборотом средств, для этого свяжитесь пожалуйста с нами по данной почте: 
+        a(href='mailto:personal.service@cryptochange.com') personal.service@cryptochange.com
+      p
+        b С уважением, команда CryptoChange.com
+block sidebar
+  include ./includes/balance

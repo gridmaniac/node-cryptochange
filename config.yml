@@ -1,0 +1,12 @@
+mongo:
+  host: localhost
+  port: 27017
+  db: cryptochange
+  user: admin
+  pass: 123
+
+admin:
+  email: test@admin.com
+  pass: 123
+
+preset: default

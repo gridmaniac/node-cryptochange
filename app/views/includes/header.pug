@@ -1,0 +1,107 @@
+block header
+  .header-wrapper
+    .header
+      .header__top        
+        .header__logo
+          a(href="/")
+            img( src="/assets/imgs/cryptochange_logo.png")
+        .header__top-right
+          .header__service-state-container
+            .header__service-state-icon
+              .icon-clocks
+            .header__service-state-text
+              p Статус обменника:
+              if status
+                p.header__service-state.header__service-state_active Работает
+              else
+                p.header__service-state.header__service-state_disabled На тех. обслуживании
+          div.header__login-button-wrapper
+            if !user
+              a.button.button_type-green(data-toggle='modal' data-target='#modal-login') Войти
+            else
+              a.button.button_type-green(href='/logout') Выйти
+      .header__bottom
+        ul.header-navigation
+          li.header-navigation__item.header-navigation__item_active
+            a(href="/") Обмен
+          li.header-navigation__item
+            a(href="/help") Помощь
+          li.header-navigation__item
+            a(href="/agreement") Соглашение
+          li.header-navigation__item
+            a(href="/partners") Партнерам
+          li.header-navigation__item
+            a(href="/guarantees") Гарантии
+          li.header-navigation__item
+            a(href="/contacts") Контакты
+          li.header-navigation__item
+            a(href="/blog") Блог
+          li.header-navigation__item
+            if !user
+              a(data-toggle='modal' data-target='#modal-login')
+                .header-navigation__profile
+                  .header-navigation__profile-icon
+                    .icon-profile
+                  .header-navigation__profile-title.header-navigation__profile-title_long
+                    p Личный кабинет
+                  .header-navigation__profile-title.header-navigation__profile-title_short
+                    p ЛК
+            else
+              a(href='/account/orders')
+                .header-navigation__profile
+                  .header-navigation__profile-icon
+                    .icon-profile
+                  .header-navigation__profile-title.header-navigation__profile-title_long
+                    p Личный кабинет
+                  .header-navigation__profile-title.header-navigation__profile-title_short
+                    p ЛК
+        if user
+          ul.header-navigation.profile-navigation
+            li.header-navigation__item.header-navigation__item_active.profile-navigation__item
+              a(href="/account/orders") Мои заявки
+            li.header-navigation__item.profile-navigation.profile-navigation__item
+              a(href="/account/requisites") Мои реквизиты
+            li.header-navigation__item.profile-navigation.profile-navigation__item
+              a(href="/account/affiliate") Партнерская программа 
+            li.header-navigation__item.profile-navigation.profile-navigation__item
+              a(href="/account/password") Сменить пароль
+            li.header-navigation__item.profile-navigation__item
+              a(href="/logout") Выход
+          br
+          br 
+        .header-adaptive-navigation
+          .header-adaptive-navigation__title
+            p Главное меню
+            .icon-arrow-down-2
+          ul.header-adaptive-navigation__items
+            li.header-adaptive-navigation__item
+              a(href="/") Обмен
+            li.header-adaptive-navigation__item
+              a(href="/help") Помощь
+            li.header-adaptive-navigation__item
+              a(href="/agreement") Соглашение
+            li.header-adaptive-navigation__item
+              a(href="/partners") Партнерам
+            li.header-adaptive-navigation__item
+              a(href="/guarantees") Гарантии
+            li.header-adaptive-navigation__item
+              a(href="/contacts") Контакты
+            li.header-adaptive-navigation__item
+              a(href="/contacts") Блог
+            li.header-adaptive-navigation__item
+              if !user
+                a.button.button_type-green(data-toggle='modal' data-target='#modal-login') Личный кабинет
+              else
+                a(href='/account/orders') Личный кабинет
+            if user
+              li.header-adaptive-navigation__item.profile-navigation__item
+                a(href="/account/orders") Мои заявки
+              li.header-adaptive-navigation__item.profile-navigation__item
+                a(href="/account/requisites") Мои реквизиты
+              li.header-adaptive-navigation__item.profile-navigation__item
+                a(href="/account/affiliate") Партнерская програма
+              li.header-adaptive-navigation__item.profile-navigation__item
+                a(href="/account/password") Сменить пароль
+              li.header-adaptive-navigation__item.profile-navigation__item
+                a(href="/logout") Выход
+  include ../includes/modals/login.pug

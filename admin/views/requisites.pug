@@ -1,0 +1,37 @@
+extend layout
+
+block content
+  .container-fluid
+    .row.page-titles
+      .col-md-6.col-8.align-self-center
+        h3.text-themecolor.m-b-0.m-t-0 Реквизиты
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href='/admin/') Обменник
+          li.breadcrumb-item.active Реквизиты
+      include ./modules/status
+    .row
+      .col-sm-12
+        .card
+          .card-block
+            h4.card-title Реквизиты
+            .table-responsive.m-t-40
+              table.table.stylish-table
+                thead
+                  tr
+                    th Наименование
+                    th Используется
+                tbody(style="cursor:pointer")
+                  if !requisites || requisites.length == 0
+                    tr
+                      td(colspan='2') Нет добавленных реквизитов
+                  else
+                    each requisite in requisites
+                      tr(onclick=`location='/admin/requisites/${requisite.id}'`)
+                        td
+                          h6=requisite.title
+                          small.text-muted=requisite.alias
+                        td
+                          if requisite.involved
+                            i.ti-check.text-primary
+            a.btn.btn-success.pull-right(href="/admin/requisites/new") Добавить
