@@ -22,7 +22,7 @@
     "koa-session": "^5.5.0",
     "koa-state": "^1.1.0",
     "koa-static": "^4.0.1",
-    "moment": "^2.19.0",
+    "moment": "^2.29.2",
     "money": "^0.2.0",
     "mongoose": "^4.12.2",
     "mongoose-auto-increment": "^5.0.1",
